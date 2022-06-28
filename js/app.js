@@ -2,57 +2,155 @@ const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
 class Wall {
-  constructor({position}) {
+  constructor({position, srcPosition, image}) {
     this.position = position;
-    this.width = 20;
-    this.height = 20;
+    this.width = 32;
+    this.height = 32;
+    this.srcPosition = srcPosition;
+    this.image = image;
   }
 
   draw() {
-    ctx.fillStyle = '#0000ff';
-    ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+    // ctx.fillStyle = '#0000ff';
+    // ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+    ctx.drawImage(this.image, this.srcPosition.sx, this.srcPosition.sy, 32, 32, this.position.dx, this.position.dy, this.width, this.height);
   }
 }
 
+/*16x16*/
 const map = [
-  ['1', '1', '1', '1', '1', '1', '1', '1'],
-  ['1', '0', '0', '0', '0', '0', '0', '1'],
-  ['1', '0', '0', '0', '0', '0', '0', '1'],
-  ['1', '0', '0', '1', '1', '0', '0', '1'],
-  ['1', '0', '0', '1', '1', '0', '0', '1'],
-  ['1', '0', '0', '0', '0', '0', '0', '1'],
-  ['1', '0', '0', '0', '0', '0', '0', '1'],
-  ['1', '1', '1', '1', '1', '1', '1', '1'],
+  ['ul', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'ur'],
+  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['ll', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'hw', 'lr'],
 ];
 
 const walls = [];
 
-/* LEGEND
-0 - blank
-1 - wall
-p - pacman
-g - ghost
-2 - fruit
-3 - fruit
+/* LEGEND FOR MAP ELEMENTS
+Char      Description
+-----------------------------------
+ul    |    upper left corner wall
+ll    |    lower left corner wall
+ur    |    upper right corner wall
+lr    |    lower right corner wall
+pm    |    pacman
+cc    |    coin
+00    |    blank 
+01    |    cherry 
+02    |    strawberry
+-----------------------------------
 */
+
+const generateImage = (src) => {
+  const img = new Image();
+  img.src = src;
+  //console.log(img);
+  return img;
+}
+
+
 for (let i = 0; i < map.length; i++) {
   for (let j = 0; j < map[i].length; j++) {
     switch(map[i][j]) {
-      case '1':
+      case 'vw':
         walls.push(new Wall ({
           position: {
-            x : j * 20,
-            y : i * 20
-          }
+            dx : j * 32,
+            dy : i * 32
+          },
+          srcPosition: {
+            sx : 264,
+            sy : 273
+          },
+          image: generateImage("../assets/images/pacman-map-sprites2.png")
+        }));
+        break;
+      case 'hw':
+        walls.push(new Wall ({
+          position: {
+            dx : j * 32,
+            dy : i * 32
+          },
+          srcPosition: {
+            sx : 298,
+            sy : 250
+          },
+          image: generateImage("../assets/images/pacman-map-sprites2.png")
+        }));
+        break;
+      case 'ul':
+        walls.push(new Wall ({
+          position: {
+            dx : j * 32,
+            dy : i * 32
+          },
+          srcPosition: {
+            sx : 264,
+            sy : 250
+          },
+          image: generateImage("../assets/images/pacman-map-sprites2.png")
+        }));
+        break;
+        case 'll':
+        walls.push(new Wall ({
+          position: {
+            dx : j * 32,
+            dy : i * 32
+          },
+          srcPosition: {
+            sx : 264,
+            sy : 738
+          },
+          image: generateImage("../assets/images/pacman-map-sprites2.png")
+        }));
+        break;
+        case 'ur':
+        walls.push(new Wall ({
+          position: {
+            dx : j * 32,
+            dy : i * 32
+          },
+          srcPosition: {
+            sx : 704,
+            sy : 250
+          },
+          image: generateImage("../assets/images/pacman-map-sprites2.png")
+        }));
+        break;
+        case 'lr':
+        walls.push(new Wall ({
+          position: {
+            dx : j * 32,
+            dy : i * 32
+          },
+          srcPosition: {
+            sx : 704,
+            sy : 738
+          },
+          image: generateImage("../assets/images/pacman-map-sprites2.png")
         }));
         break;
     }
   }
 }
 
-// console.log(walls);
-
-for (let i = 0; i < walls.length; i++) {
-  console.log(walls);
-  walls[i].draw();
+onload = function() {
+  for (let i = 0; i < walls.length; i++) {
+    //console.log(walls[i]);
+    walls[i].draw();
+  }
 }
+
