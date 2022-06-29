@@ -1,6 +1,9 @@
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
 class Wall {
   constructor({ position, srcPosition, image }) {
     this.position = position;
@@ -30,7 +33,9 @@ class Player {
   draw() {
     ctx.drawImage(this.image, this.srcPosition.sx, this.srcPosition.sy, 32, 32, this.position.dx, this.position.dy, 32, 32);
   }
+
 }
+
 
 /*16x16*/
 const map = [
@@ -55,7 +60,7 @@ const map = [
 const walls = [];
 
 /* LEGEND FOR MAP ELEMENTS
-Char      Description
+Char       Description
 -----------------------------------
 ul    |    upper left corner wall
 ll    |    lower left corner wall
@@ -178,6 +183,8 @@ const player = new Player({
   },
   image: generateImage("../assets/images/pacman-general-sprites.png")
 });
+
+
 
 onload = function () {
   for (let i = 0; i < walls.length; i++) {
