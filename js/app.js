@@ -34,8 +34,14 @@ class Player {
     ctx.drawImage(this.image, this.srcPosition.sx, this.srcPosition.sy, 32, 32, this.position.dx, this.position.dy, 32, 32);
   }
 
+  update() {
+    this.draw();
+    this.position.dx += this.velocity.x;
+    this.position.dy += this.velocity.y;
+    console.log("dx: " + this.position.dx);
+    console.log("dy: " + this.position.dy);
+  }
 }
-
 
 /*16x16*/
 const map = [
@@ -43,10 +49,10 @@ const map = [
   ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
   ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
   ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
-  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
-  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
-  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
-  ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['vw', '00', '00', '00', '00', 'ul', 'hw', 'hw', 'ur', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['vw', '00', '00', '00', '00', 'vw', '00', '00', 'vw', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['vw', '00', '00', '00', '00', 'vw', '00', '00', 'vw', '00', '00', '00', '00', '00', '00', 'vw'],
+  ['vw', '00', '00', '00', '00', 'll', 'hw', 'hw', 'lr', '00', '00', '00', '00', '00', '00', 'vw'],
   ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
   ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
   ['vw', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'vw'],
@@ -174,8 +180,8 @@ const player = new Player({
     dy: 32,
   },
   velocity: {
-    x: 32,
-    y: 32
+    x: 0,
+    y: 0
   },
   srcPosition: {
     sx: 32,
@@ -184,14 +190,39 @@ const player = new Player({
   image: generateImage("../assets/images/pacman-general-sprites.png")
 });
 
+addEventListener('keydown', ({key}) => {
+  console.log("key: "+ key)
+  switch (key) {
+    case 'ArrowUp':
+    case 'w':
+      player.velocity.y = -8;
+      break;
+    case 'ArrowLeft':
+    case 'a':
+      player.velocity.x = -8;
+      break;
+    case 'ArrowDown':
+    case 's':
+      player.velocity.y = 8;
+      break;
+    case 'ArrowRight':
+    case 'd':
+      player.velocity.x = 8;
+      break;
+  }
+  //console.log(player.velocity);
+});
 
 
-onload = function () {
+const animate = () => {
+  requestAnimationFrame(animate);
+  ctx.clearRect(0,0, canvas.width, canvas.height);
   for (let i = 0; i < walls.length; i++) {
     //console.log(walls[i]);
     walls[i].draw();
   }
 
-  player.draw();
+  player.update();
 }
 
+animate();
